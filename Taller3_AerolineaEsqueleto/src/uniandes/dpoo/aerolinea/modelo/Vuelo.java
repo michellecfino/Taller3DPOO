@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import uniandes.dpoo.aerolinea.tiquetes.Tiquete;
 import uniandes.dpoo.aerolinea.tiquetes.GeneradorTiquetes;
 import uniandes.dpoo.aerolinea.modelo.tarifas.CalculadoraTarifas;
-import cliente.Cliente;
+import uniandes.dpoo.aerolinea.modelo.cliente.*;
 
 import java.util.Collection;
 import java.util.HashMap;

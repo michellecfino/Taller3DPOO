@@ -11,6 +11,7 @@ import uniandes.dpoo.aerolinea.modelo.Ruta;
 import uniandes.dpoo.aerolinea.persistencia.CentralPersistencia;
 import uniandes.dpoo.aerolinea.persistencia.TipoInvalidoException;
 import uniandes.dpoo.aerolinea.tiquetes.Tiquete;
+import uniandes.dpoo.aerolinea.consola.ConsolaBasica;
 
 public class ConsolaArerolinea extends ConsolaBasica
 {

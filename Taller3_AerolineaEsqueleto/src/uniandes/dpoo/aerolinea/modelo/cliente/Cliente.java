@@ -8,25 +8,23 @@ import java.util.List;
 public abstract class Cliente {
 	
 	
-    private String identificador;
     private List<Tiquete> tiquetesSinUsar;
     private List<Tiquete> tiquetesUsados;
-    private static int identificador1=0;
+  
 
     public Cliente() {
         
         this.tiquetesSinUsar = new ArrayList<>();
         this.tiquetesUsados = new ArrayList<>();
-        //Variable para crear el identificador a partir de su creación :p
-        Cliente.identificador1++;
-        this.identificador = Integer.toString(identificador1);
+
     }
 
-    public String getIdentificador() {
-        return identificador;
+    public abstract String getIdentificador(); {
     }
 
-    public abstract String getTipoCliente();
+    public abstract String getTipoCliente();{
+    	
+    }
 
     public void agregarTiquete(Tiquete tiquete) {
         tiquetesSinUsar.add(tiquete);

@@ -1,7 +1,7 @@
 package uniandes.dpoo.aerolinea.modelo.tarifas;
 
 import uniandes.dpoo.aerolinea.modelo.Vuelo;
-import cliente.Cliente;
+import uniandes.dpoo.aerolinea.modelo.cliente.*;
 import uniandes.dpoo.aerolinea.modelo.Ruta;
 
 public abstract class CalculadoraTarifas {
