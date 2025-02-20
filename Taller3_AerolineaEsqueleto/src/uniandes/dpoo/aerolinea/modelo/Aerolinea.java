@@ -164,6 +164,11 @@ public class Aerolinea
     public Vuelo getVuelo( String codigoRuta, String fechaVuelo )
     {
         // TODO implementar
+        for (Vuelo vuelo : vuelos) {
+            if (vuelo.getRuta().getCodigoRuta().equals(codigoRuta) && vuelo.getFecha().equals(fechaVuelo)) {
+                return vuelo;
+            }
+        }
         return null;
     }
 
@@ -183,8 +188,11 @@ public class Aerolinea
     public Collection<Tiquete> getTiquetes( )
     {
         // TODO implementar
-        return null;
-
+        List<Tiquete> tiquetes= new ArrayList<>();
+        for (Vuelo vuelo : vuelos) {
+            tiquetes.addAll(vuelo.getTiquetes());
+        }
+        return tiquetes;
     }
 
     // ************************************************************************************
@@ -204,8 +212,15 @@ public class Aerolinea
     public void cargarAerolinea( String archivo, String tipoArchivo ) throws TipoInvalidoException, IOException, InformacionInconsistenteException
     {
         // TODO implementar
-    }
+        CentralPersistencia centralPersistencia = new CentralPersistencia(); 
+        IPersistenciaAerolinea persistencia = centralPersistencia.getPersistenciaAerolinea(tipoArchivo);
 
+        if (persistencia == null) {
+            throw new TipoInvalidoException("Tipo de archivo no válido: " + tipoArchivo);
+        }
+
+        persistencia.cargarAerolinea(archivo, this); // Se delega la carga de datos
+    }
     /**
      * Salva la información de la aerlínea en un archivo
      * @param archivo El nombre del archivo.
@@ -266,6 +281,24 @@ public class Aerolinea
     public void programarVuelo( String fecha, String codigoRuta, String nombreAvion ) throws Exception
     {
         // TODO Implementar el método
+        Ruta ruta = rutas.get(codigoRuta);
+        if (ruta == null) {
+            throw new Exception("La ruta con código " + codigoRuta + " no existe.");
+        }
+
+        Avion avion = aviones.get(nombreAvion);
+        if (avion == null) {
+            throw new Exception("El avión con nombre " + nombreAvion + " no existe.");
+        }
+
+        for (Vuelo vuelo : vuelos) {
+            if (vuelo.getFecha().equals(fecha) && vuelo.getAvion().equals(avion)) {
+                throw new Exception("El avión " + nombreAvion + " ya está programado para otro vuelo en la fecha " + fecha);
+            }
+        }
+
+        vuelos.add(new Vuelo(ruta, fecha, avion));
+    	
     }
 
     /**
@@ -286,7 +319,44 @@ public class Aerolinea
     public int venderTiquetes( String identificadorCliente, String fecha, String codigoRuta, int cantidad ) throws VueloSobrevendidoException, Exception
     {
         // TODO Implementar el método
-        return -1;
+        Cliente cliente = clientes.get(identificadorCliente);
+        if (cliente == null) {
+            throw new Exception(identificadorCliente + " no existe.");
+        }
+
+        Vuelo vueloEncontrado = null;
+        for (Vuelo v : vuelos) {
+            if (v.getFecha().equals(fecha) && v.getRuta().getCodigoRuta().equals(codigoRuta)) {
+                vueloEncontrado = v;
+                break;
+            }
+        }
+        if (vueloEncontrado == null) {
+            throw new Exception("No hay disponibilidad");
+        }
+
+        Avion avion = vueloEncontrado.getAvion();
+        int capacidadDisponible = avion.getCapacidad() - vueloEncontrado.getTiquetes().size();
+        if (cantidad > capacidadDisponible) {
+            throw new VueloSobrevendidoException("No hay suficientes asientos disponibles en el vuelo.");
+        }
+
+        // 4️⃣ Determinar la tarifa según la temporada (directamente en el código)
+        int tarifaBase = vueloEncontrado.getRuta().getTarifa();
+        int mes = Integer.parsexInt(fecha.split("-")[1]); // Asumiendo formato YYYY-MM-DD
+        int tarifaFinal = ((mes >= 6 && mes <= 8) || (mes == 12)) ? (int) (tarifaBase * 1.2) : tarifaBase; // 20% más en temporada alta
+
+        // 5️⃣ Crear y registrar los tiquetes
+        GeneradorTiquetes generador = new GeneradorTiquetes();
+        int totalVenta = 0;
+        for (int i = 0; i < cantidad; i++) {
+            Tiquete nuevoTiquete = generador.generarTiquete(vueloEncontrado, cliente, tarifaFinal);
+            vueloEncontrado.agregarTiquete(nuevoTiquete);
+            cliente.agregarTiquete(nuevoTiquete);
+            totalVenta += tarifaFinal;
+        }
+
+        return totalVenta;
     }
 
     /**

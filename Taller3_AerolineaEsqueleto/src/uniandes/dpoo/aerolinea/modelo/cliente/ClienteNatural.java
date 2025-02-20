@@ -18,9 +18,10 @@ public class ClienteNatural extends Cliente{
 	
 	
 	public String getIdentificador() {
+
 		
 		
-		return super.;
+		return nombre;
 	}
 	
 	

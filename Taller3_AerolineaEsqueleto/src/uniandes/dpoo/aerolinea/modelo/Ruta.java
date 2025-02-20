@@ -7,6 +7,21 @@ public class Ruta
 {
     // TODO completar
 
+	private String horaSalida;
+	private String horaLlegada;
+	private String codigoRuta;
+	private Aeropuerto origen;
+	private Aeropuerto destino;
+	public Ruta(Aeropuerto origen, Aeropuerto destino, String horaSalida, String horaLlegada, String codigoRuta) {
+	
+		this.origen= origen;
+		this.destino=destino;
+		this.horaSalida = horaSalida;
+		this.horaLlegada = horaLlegada;
+		this.codigoRuta = codigoRuta;
+		
+		
+	}
 
     /**
      * Dada una cadena con una hora y minutos, retorna los minutos.
@@ -33,6 +48,52 @@ public class Ruta
         int horas = Integer.parseInt( horaCompleta ) / 100;
         return horas;
     }
+    
+    public String getCodigoRuta() {
+    	
+    	return codigoRuta;
+    	
+    }
+
+    public Aeropuerto getOrigen() {
+    	return origen;
+    }
+    
+    public Aeropuerto getDestino() {
+    	return destino;
+    }
+    public String getHoraSalida() {
+    	return horaSalida;
+    	
+    }
+    public String getHoraLlegada() {
+    	return horaLlegada;
+    }
+    public int Duracion() {
+    	int horasSalida = getHoras(horaSalida);
+        int minutosSalida = getMinutos(horaSalida);
+        
+        int horasLlegada = getHoras(horaLlegada);
+        int minutosLlegada = getMinutos(horaLlegada);
+        
+        int totalMinutosSalida = horasSalida * 60 + minutosSalida;
+        int totalMinutosLlegada = horasLlegada * 60 + minutosLlegada;
+        
+        int duracion = totalMinutosLlegada - totalMinutosSalida;
+
+        if (duracion < 0) {
+            duracion += 24 * 60; }
+        
+        int horasDuracion = duracion / 60;
+        int minutosDuracion = duracion % 60;
+
+        return horasDuracion * 100 + minutosDuracion;
+    }
+
+    public int getDuracion() {
+    	return Duracion();
+    }
+    
 
     
 }

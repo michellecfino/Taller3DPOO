@@ -1,4 +1,6 @@
 package uniandes.dpoo.aerolinea.tiquetes;
+import java.util.List;
+
 import cliente.Cliente;
 import uniandes.dpoo.aerolinea.modelo.Vuelo;
 
@@ -11,11 +13,11 @@ public class Tiquete {
 	private Vuelo vuelo;
 	private Cliente clienteComprador;
 	
-	public Tiquete(String codigo, Vuelo vuelo, Cliente clienteComprador, int tarifa) {
+	public Tiquete(String codigo, Vuelo vuelo, Cliente cliente, int tarifa) {
 		
 		this.codigo = codigo;
 		this.vuelo = vuelo;
-		this.clienteComprador = clienteComprador;
+		this.clienteComprador = cliente;
 		this.tarifa = tarifa;
 		this.usado = false;
 	}
